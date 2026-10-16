@@ -1,0 +1,4 @@
+[Security Research - Inconsistent Security Warning PoC]
+Payload: google_chrome_update.apk
+Status: Downloaded successfully
+Note: Test file for demonstrating security warning enforcement.

